@@ -25,7 +25,8 @@ jobs:
     docker:
       - image: circleci/golang:1.16
     steps:
-      - checkout
+      - checkout:
+          path: ~/repo
       - run:
           name: integration test
           command: git clone https://github.com/smart-think-app/golang-testing.git
