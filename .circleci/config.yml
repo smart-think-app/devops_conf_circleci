@@ -37,13 +37,13 @@ jobs:
       - run:
           name: Install Dependencies
           command: cd golang-testing && go get ./...
-      # - save_cache:
-      #     key: go-mod-v4-{{ checksum "go.sum" }}
-      #     paths:
-      #       - "/go/pkg/mod"
-      # - run:
-      #     name: Run tests
-      #     command: go test -v
+      - save_cache:
+          key: go-mod-v4-{{ checksum "golang-testing/go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+      - run:
+          name: Run tests
+          command: cd golang-testing && go test -v
 workflows:
   build_and_test:
     jobs:
