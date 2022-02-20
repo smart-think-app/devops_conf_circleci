@@ -10,13 +10,31 @@ jobs:
           version: 19.03.13
           docker_layer_caching: true
       - run:
-          name: clone code
+          name: clone code project
           command: git clone https://github.com/smart-think-app/golang-service.git 
       - run:
           name: build docker
           command:  |
             cp Dockerfile ./golang-service
             cd golang-service && docker build --tag tqhuy1996developer/go-dk1 .
-      # - run:
-      #     name: Run tests
-      #     command: go test -v
+      - run:
+          name: integration test
+          command: git clone https://github.com/smart-think-app/golang-testing.git
+  test:
+    working_directory: ~/repo/golang-testing
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - run:
+          name: Install Dependencies
+          command: go get ./...
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+      - run:
+          name: Run tests
+          command: go test -v
+          
