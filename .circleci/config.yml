@@ -22,6 +22,8 @@ jobs:
           command: git clone https://github.com/smart-think-app/golang-testing.git
   test:
     working_directory: ~/repo/golang-testing
+    docker:
+      - image: circleci/golang:1.16
     steps:
       - checkout
       - restore_cache:
