@@ -15,7 +15,7 @@ jobs:
       - run:
           name: build docker
           command:  |
-            docker build -t tqhuy1996developer/go-dk1:latest
+            docker build --tag tqhuy1996developer/go-dk1:latest .
             docker login -u tqhuy1996developer -p Husky@0946515847
             docker push tqhuy1996developer/go-dk1:latest
       # - run:
