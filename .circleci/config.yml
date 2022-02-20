@@ -27,11 +27,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: check
-          command: ls 
-      # - restore_cache:
-      #     keys:
-      #       - go-mod-v4-{{ checksum "go.sum" }}
+          name: integration test
+          command: git clone https://github.com/smart-think-app/golang-testing.git
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
       # - run:
       #     name: Install Dependencies
       #     command: go get ./...
