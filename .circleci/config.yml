@@ -30,7 +30,7 @@ jobs:
           name: integration test
           command:  | 
             git clone https://github.com/smart-think-app/golang-testing.git
-            cd golang-testing
+      - run: cd golang-testing
       - restore_cache:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
