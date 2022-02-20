@@ -45,6 +45,8 @@ jobs:
           name: Run tests
           command: cd golang-testing && go test -v
   deploy:
+    docker:
+      - image: circleci/golang:1.16
     steps:
       - run:
           name: deploy k8s
