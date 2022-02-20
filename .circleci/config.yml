@@ -28,7 +28,7 @@ jobs:
       - checkout
       - run:
           name: check
-          command: ls
+          command: ls 
       # - restore_cache:
       #     keys:
       #       - go-mod-v4-{{ checksum "go.sum" }}
