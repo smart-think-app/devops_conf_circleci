@@ -37,4 +37,8 @@ jobs:
       - run:
           name: Run tests
           command: go test -v
-          
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test
