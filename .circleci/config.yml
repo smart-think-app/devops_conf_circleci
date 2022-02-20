@@ -15,7 +15,8 @@ jobs:
       - run:
           name: build docker
           command:  |
-            docker build --tag tqhuy1996developer/go-dk1 /golang-service
+            cp Dockerfile /golang-service
+            cd golang-service && docker build --tag tqhuy1996developer/go-dk1 /golang-service
       # - run:
       #     name: Run tests
       #     command: go test -v
