@@ -21,7 +21,7 @@ jobs:
           name: integration test
           command: git clone https://github.com/smart-think-app/golang-testing.git
   test:
-    working_directory: ~/repo
+    working_directory: ~/repo/golang-testing
     docker:
       - image: circleci/golang:1.16
     steps:
@@ -30,7 +30,6 @@ jobs:
           name: integration test
           command:  | 
             git clone https://github.com/smart-think-app/golang-testing.git
-      - run: cd golang-testing
       - restore_cache:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
