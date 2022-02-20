@@ -29,14 +29,12 @@ jobs:
       - run:
           name: integration test
           command: git clone https://github.com/smart-think-app/golang-testing.git
-      - checkout:
-          path: ~/repo/golang-testing
       - restore_cache:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
       - run:
           name: Install Dependencies
-          command: go get ./...
+          command: cd golang-testing && go get ./...
       - save_cache:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
