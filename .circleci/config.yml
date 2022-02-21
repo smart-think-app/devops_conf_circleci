@@ -54,7 +54,7 @@ jobs:
           command:  |
             echo "deploy on production"
 workflows:
-  cicd:
+  build_and_test_and_deploy:
     jobs:
       - build
       - test:
