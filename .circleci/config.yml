@@ -18,8 +18,9 @@ jobs:
             cp Dockerfile ./golang-service
             cd golang-service && docker build --tag tqhuy1996developer/go-dk1 .
       - run:
-          name: integration test
-          command: git clone https://github.com/smart-think-app/golang-testing.git
+          name: build pilot server
+          command:  |
+            echo "build  pilot server"
   test:
     working_directory: ~/repo
     docker:
@@ -44,16 +45,16 @@ jobs:
       - run:
           name: Run tests
           command: cd golang-testing && go test -v
-  deploy:
+  deploy_prod:
     docker:
       - image: circleci/golang:1.16
     steps:
       - run:
-          name: deploy k8s
+          name: deploy on production
           command:  |
-            echo "deploy k8s"
+            echo "deploy on production"
 workflows:
-  build_and_test_and_deploy:
+  cicd:
     jobs:
       - build
       - test:
