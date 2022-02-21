@@ -45,6 +45,11 @@ jobs:
       - run:
           name: Run tests
           command: cd golang-testing && go test -v
+      - run:
+          name: rollback server
+          command:  |
+            echo "rollback deployment"
+          when: on_fail
   deploy_prod:
     docker:
       - image: circleci/golang:1.16
