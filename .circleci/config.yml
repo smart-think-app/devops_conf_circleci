@@ -35,6 +35,12 @@ jobs:
           google-project-id: GOOGLE_PROJECT_ID
           registry-url: "gcr.io"
           image: $IMAGE_NAME
+      - cloudrun/deploy:
+          platform: "managed"
+          image: "gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME"
+          service-name: "my-circle-cloud-run"
+          region: $GOOGLE_COMPUTE_ZONE
+          unauthenticated: true
       # - cloudrun/deploy:
       #     platform: "managed"
       #     image: "gcr.io/impressive-mile-343315/go-service"
