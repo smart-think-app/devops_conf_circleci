@@ -19,57 +19,22 @@ jobs:
           name: build docker
           command:  |
             cp Dockerfile ./golang-service
+            cp gcloud-service-key.json ./golang-service
             cd golang-service
-            docker build -t gcr.io/impressive-mile-343315/go-service -t gcr.io/impressive-mile-343315/go-service:latest .
+            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV
+            echo 'export GOOGLE_CLOUD_KEYS=$(cat $HOME/gcloud-service-key.json)' >> $BASH_ENV
+            echo 'export IMAGE_NAME=go-service' >> $BASH_ENV && source $BASH_ENV
+            pip install --user -r requirements.txt
+            pyinstaller -F hello_world.py
+            docker build -t gcr.io/impressive-mile-343315/$IMAGE_NAME -t gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME:latest .
       - gcp-gcr/gcr-auth:
-          gcloud-service-key: ew0KICAgICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsDQogICAgInByb2plY3RfaWQiOiAiaW1w
-cmVzc2l2ZS1taWxlLTM0MzMxNSIsDQogICAgInByaXZhdGVfa2V5X2lkIjogIjc2ZWE0Mjg3ZDQ2
-ZTg4OWU3MTBjZTJiNjg1ZTBiM2I0MWFjZmYyMGIiLA0KICAgICJwcml2YXRlX2tleSI6ICItLS0t
-LUJFR0lOIFBSSVZBVEUgS0VZLS0tLS1cbk1JSUV2Z0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVND
-Qktnd2dnU2tBZ0VBQW9JQkFRRE5oYUNzeFhvRkRQMjhcbnluZWtKWHI4SW45OElCWCtqSHJieVNy
-Yjl4QUlpVStLOUpLMTZ1cVFsTGpISEttdFljWkFpNnJkaVZjdlo1L1Jcbnd6cWVIK0k2V1U1Ykww
-MGh5aWllbVpIQXdRQW1JSTRkWkZEM0t3V3drUjVkM2RaaUk2RVRJUDBtc1lTazlUaFFcbjVEWkVz
-QTlRYmVSMTlIb04xTTBVb2RzQzl1V1VQTzV0QnFqNnNhMTlyTU9KMm43UThvN3M5UEhiVmV2WEM5
-dnNcbi9tQ3Z5Z2xDa2hXZWU1TElMTGxJTmZpYldVK0NqU0w4YUVvdllKT2RkQTlMSG1rWC9CL0xS
-Z2tlWXYxbXdWVlhcbms2eURkb2Z1VkZLaHNvaVFtRi9CZFRmU2ZsaFB3eS9MZ2xVR1BtTWo3NXZn
-QUFGbW1HdGZxcWJPL1ZBblBTV0hcblVkY1B0eWFCQWdNQkFBRUNnZ0VBQU9vczRtRTZPY2hiZnhx
-SVVENTJmbVdnSVVhYmdMUWorVEZKVEU2S2VuaGZcbmpJUzJIQnl3YVVrSVRHcURuRXAwWitMUHdZ
-YmZvTG5oQnRlSjdkYVNXY0ZHVk9QTlI4UENodm4vM1hXVjg4ZDlcbnZMQjh4MHg2ZHVjeTB6ajlO
-Zk5veVhYMFZyNnA4b3ZLNWJvMTdpZmh1L0ZXNWNRSkpyRnYwYVU2cjBQM2NxdXRcbm52eS8yWnpw
-Z2F3U25zdGYyNlNiMmpMdW9IOTVVS0Y2cjJyR2tUZTAvNjVWS2F2MCt4dU45SlJkQUkrSVdMZDZc
-bi9iaWlnU1p1NmhBRXNJRGtkTDA4MUxKZW0xeWRnREVua3NtM3RCbkxDZzBsaG10eTVqSTFPODZU
-YjdNby9UTklcbnorRzN5UlhIajlmYlp3NGdjMVJIcStnY25jaDhFQ0NIdzd5UjBHSThBUUtCZ1FE
-bVY0bkpYWUtQZmdFZXRpT3pcbkVYbGRQTW53VzdKbWhXYzNFVlk5KzF6Wlc1NnFjTWp2SnpFbXFE
-OEpNQldDQ3Q2VVl6K0c3eVp5VEFHdTJVbGpcbkVaQ0lxeFJJR3FYTmtJZmZvOXZITVVmV3JWdU92
-UzZZekpRMUh1UmJSVWJpVUdRV29MMkZYcnM4akRuNGRkanRcbmIyWnd6OC9SZ3p2ZGJiU04zcUlI
-UzRPc0FRS0JnUURrYWxIc1h3d0EwYXRmbkdoVHRBbmVvOUVRakZaclh3NkdcbmZobXR3TWY0Qi9S
-N1BVZkRoRFdWdXREaXNRby9vTmxmSGxhcEgrREdZbXU3SkxwVFlYMUh2b3BBVjRkcWFNMklcblE5
-R3UvN3E4ZjIzRDl2ZnR2di9SeWgrWk81YUlFRHRETE1JZ3BQcmt0N2ZXRFNIemd1MDRzR3ZYVFJS
-WS9ZbFJcbmUxaXlabVY2Z1FLQmdHOUhTUlNUN1ZnL0tuRlkwdVJXZzhoTWJzNkVyaW9qTnByKzhD
-Z2ZnRnF0alhpUDVqTExcblAwNktwM0ZiM25nbG9pUVQwb1B3a3lWU25ObUl0WkI3MHRTRHVkZWZz
-QXdnVDlQMkNGNHg2NS9Gdmw2MS9JWHJcbkI0cW1Ndkg1Qk9hZXFjdll1ZFp0em96UXZjelB1ZzN5
-N0kyQmg4ZVMyOS84ZU9hMDhKZ1BuandCQW9HQkFOWUtcbnY0dzFvUVRmZGEwWjN6V1l2NnJ2YmNr
-SkNTNkNuQlR4ODlRN2srZmNaSUJiODNURzNvUFoxVWFveWtiSHp3cHdcblhwc0xjVkhXQnNnTzZi
-K2EycEF4Z0ZJODgzdUdqQnVHR2ViWVl6K2lWZFRPQ0pTMFovdEtZZ1B3citYKzk5bkNcbkJvUWF0
-YlZBWjdmaEJKQ3hmdVNoaGR6eXNQK1hUbWVabzR0Qm94U0JBb0dCQUkyMm1zS2pjcmg5TXJUUDBT
-RHVcbjlUSFFZKzdNdW1ySUdtUG9PeERLR210R2FQWHl0MmV6Y1ZNYlMzZXkvb1JkUU9xMFY3M0do
-Y0lxbXI1dlBuUThcbjdFcUYrTGxRS1Fudno0L05PTmd5czA0T3lBNGxOYjY1aHp0Y0FqZnFVT2dC
-dE5KNnpVNklXRmFPaHZ2eUczeDhcbmFkQUd6R3A2U0dHK2J3RWFhd2pDcStJOFxuLS0tLS1FTkQg
-UFJJVkFURSBLRVktLS0tLVxuIiwNCiAgICAiY2xpZW50X2VtYWlsIjogImltcHJlc3NpdmUtbWls
-ZS0zNDMzMTVAYXBwc3BvdC5nc2VydmljZWFjY291bnQuY29tIiwNCiAgICAiY2xpZW50X2lkIjog
-IjEwMzI4MTI1NTQ2NjM4MTU5NjgwNSIsDQogICAgImF1dGhfdXJpIjogImh0dHBzOi8vYWNjb3Vu
-dHMuZ29vZ2xlLmNvbS9vL29hdXRoMi9hdXRoIiwNCiAgICAidG9rZW5fdXJpIjogImh0dHBzOi8v
-b2F1dGgyLmdvb2dsZWFwaXMuY29tL3Rva2VuIiwNCiAgICAiYXV0aF9wcm92aWRlcl94NTA5X2Nl
-cnRfdXJsIjogImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL29hdXRoMi92MS9jZXJ0cyIsDQog
-ICAgImNsaWVudF94NTA5X2NlcnRfdXJsIjogImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL3Jv
-Ym90L3YxL21ldGFkYXRhL3g1MDkvaW1wcmVzc2l2ZS1taWxlLTM0MzMxNSU0MGFwcHNwb3QuZ3Nl
-cnZpY2VhY2NvdW50LmNvbSINCiAgfQ0KICA=
+          gcloud-service-key: GOOGLE_CLOUD_KEYS
           google-project-id: impressive-mile-343315
           google-compute-zone: us-west1-a
       - gcp-gcr/push-image:
           google-project-id: impressive-mile-343315
           registry-url: "gcr.io"
-          image: go-service
+          image: $IMAGE_NAME
       # - cloudrun/deploy:
       #     platform: "managed"
       #     image: "gcr.io/impressive-mile-343315/go-service"
