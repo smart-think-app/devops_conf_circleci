@@ -1,0 +1,70 @@
+version: 2.1
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/golang:1.16
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 19.03.13
+          docker_layer_caching: true
+      - run:
+          name: clone code project
+          command: git clone https://github.com/smart-think-app/golang-service.git 
+      - run:
+          name: build docker
+          command:  |
+            cp Dockerfile ./golang-service
+            cd golang-service && docker build --tag tqhuy1996developer/go-dk1 .
+      - run:
+          name: build pilot server
+          command:  |
+            echo "build  pilot server"
+  test:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/golang:1.16
+    steps:
+      - checkout
+      - run:
+          name: integration test
+          command:  | 
+            git clone https://github.com/smart-think-app/golang-testing.git
+            cd golang-testing && ls
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "golang-testing/go.sum" }}
+      - run:
+          name: Install Dependencies
+          command: cd golang-testing && go get ./...
+      - save_cache:
+          key: go-mod-v4-{{ checksum "golang-testing/go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+      - run:
+          name: Run tests
+          command: cd golang-testing && go test -v
+      - run:
+          name: rollback server
+          command:  |
+            echo "rollback deployment"
+          when: on_fail
+  deploy_prod:
+    docker:
+      - image: circleci/golang:1.16
+    steps:
+      - run:
+          name: deploy on production
+          command:  |
+            echo "deploy on production"
+workflows:
+  build_and_test_and_deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy_prod:
+          requires:
+            - test
