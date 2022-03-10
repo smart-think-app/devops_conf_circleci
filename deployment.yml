@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deployment-v1
+  name: deployment-golang
   namespace: default
   labels:
     app: deployment-golang
@@ -33,4 +33,4 @@ spec:
   ports:
     - protocol: TCP
       port: 8080
-      nodePort: 8080
+      targetPort: 8080
