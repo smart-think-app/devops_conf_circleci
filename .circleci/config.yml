@@ -19,8 +19,8 @@ jobs:
           name: build docker
           command:  |
             # cp Dockerfile ./golang-service
-            cp gcloud-service-key.json ./golang-service
-            cd golang-service
+            # cp gcloud-service-key.json ./golang-service
+            # cd golang-service
             echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV
             echo 'export GOOGLE_CLOUD_KEYS=$(cat gcloud-service-key.json)' >> $BASH_ENV
             echo 'export IMAGE_NAME=go-service' >> $BASH_ENV && source $BASH_ENV
