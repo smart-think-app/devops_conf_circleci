@@ -37,7 +37,7 @@ jobs:
       - run:
           name: deployment
           command:  |
-            gcloud --quiet container clusters get-credentials my-first-cluster
+            gcloud --quiet container clusters get-credentials my-circle-cluster
             kubectl apply -f deployment.yml
 workflows:
   build:
