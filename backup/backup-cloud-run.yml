@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
-  gke: circleci/gcp-gke@x.y.z
   gcp-gcr: circleci/gcp-gcr@0.6.1
+  cloudrun: circleci/gcp-cloud-run@1.0.0
 jobs:
   build:
     working_directory: ~/repo
@@ -35,10 +35,12 @@ jobs:
           google-project-id: GOOGLE_PROJECT_ID
           registry-url: "gcr.io"
           image: $IMAGE_NAME
-      - run:
-          name: deployment
-          command:  |
-            kubectl apply -f deployment.yml
+      - cloudrun/deploy:
+          platform: "managed"
+          image: "gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME"
+          service-name: "my-circle-cloud-run"
+          region: $GOOGLE_COMPUTE_ZONE
+          unauthenticated: true
 workflows:
   build:
     jobs:
