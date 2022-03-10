@@ -34,11 +34,11 @@ jobs:
           google-project-id: GOOGLE_PROJECT_ID
           registry-url: "gcr.io"
           image: $IMAGE_NAME
+      - gke/install
       - run:
           name: deployment
           command:  |
             gcloud --quiet container clusters get-credentials my-circle-cluster
-            gcloud components install kubectl
             kubectl apply -f deployment.yml
 workflows:
   build:
