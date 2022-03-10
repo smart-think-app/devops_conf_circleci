@@ -24,7 +24,7 @@ jobs:
             echo 'export GOOGLE_CLOUD_KEYS=$(cat gcloud-service-key.json)' >> $BASH_ENV
             echo 'export IMAGE_NAME=go-service' >> $BASH_ENV && source $BASH_ENV
             echo 'export GOOGLE_PROJECT_ID=impressive-mile-343315' >> $BASH_ENV && source $BASH_ENV
-            echo 'export GOOGLE_COMPUTE_ZONE=us-central1' >> $BASH_ENV && source $BASH_ENV
+            echo 'export GOOGLE_COMPUTE_ZONE=us-central1-c' >> $BASH_ENV && source $BASH_ENV
             docker build -t gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME -t gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME:latest .
       - gcp-gcr/gcr-auth:
           gcloud-service-key: GOOGLE_CLOUD_KEYS
