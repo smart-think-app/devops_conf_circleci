@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: go-service
-        image: grc.io/impressive-mile-343315/go-service:latest
+        image: grc.io/impressive-mile-343315/go-service
         ports:
         - containerPort: 8080
 ---
