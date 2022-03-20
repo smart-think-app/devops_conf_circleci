@@ -45,3 +45,4 @@ workflows:
   build:
     jobs:
       - build
+      # export TASK_ID=$(aws ecs list-tasks --cluster demo-ecs | jq '.taskArns | .[0]')

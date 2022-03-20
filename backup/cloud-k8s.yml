@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   gcp-gcr: circleci/gcp-gcr@0.6.1
-  cloudrun: circleci/gcp-cloud-run@1.0.0
+  gke: circleci/gcp-gke@0.2.0
 jobs:
   build:
     working_directory: ~/repo
@@ -12,35 +12,35 @@ jobs:
       - setup_remote_docker:
           version: 19.03.13
           docker_layer_caching: true
-      - run:
-          name: clone code project
-          command: git clone https://github.com/smart-think-app/golang-service.git 
+      # - run:
+      #     name: clone code project
+      #     command: git clone https://github.com/smart-think-app/golang-service.git 
       - run:
           name: build docker
           command:  |
-            cp Dockerfile ./golang-service
-            cp gcloud-service-key.json ./golang-service
-            cd golang-service
+            # cp Dockerfile ./golang-service
+            # cp gcloud-service-key.json ./golang-service
+            # cd golang-service
             echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV
             echo 'export GOOGLE_CLOUD_KEYS=$(cat gcloud-service-key.json)' >> $BASH_ENV
             echo 'export IMAGE_NAME=go-service' >> $BASH_ENV && source $BASH_ENV
             echo 'export GOOGLE_PROJECT_ID=impressive-mile-343315' >> $BASH_ENV && source $BASH_ENV
-            echo 'export GOOGLE_COMPUTE_ZONE=us-central1' >> $BASH_ENV && source $BASH_ENV
-            docker build -t gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME -t gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME:latest .
+            echo 'export GOOGLE_COMPUTE_ZONE=us-central1-c' >> $BASH_ENV && source $BASH_ENV
+            # docker build -t gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME -t gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME:latest .
       - gcp-gcr/gcr-auth:
           gcloud-service-key: GOOGLE_CLOUD_KEYS
           google-project-id: GOOGLE_PROJECT_ID
           google-compute-zone: GOOGLE_COMPUTE_ZONE
-      - gcp-gcr/push-image:
-          google-project-id: GOOGLE_PROJECT_ID
-          registry-url: "gcr.io"
-          image: $IMAGE_NAME
-      - cloudrun/deploy:
-          platform: "managed"
-          image: "gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME"
-          service-name: "my-circle-cloud-run"
-          region: $GOOGLE_COMPUTE_ZONE
-          unauthenticated: true
+      # - gcp-gcr/push-image:
+      #     google-project-id: GOOGLE_PROJECT_ID
+      #     registry-url: "gcr.io"
+      #     image: $IMAGE_NAME
+      - gke/install
+      - run:
+          name: deployment
+          command:  |
+            gcloud --quiet container clusters get-credentials my-circle-cluster
+            kubectl apply -f deployment.yml
 workflows:
   build:
     jobs:
