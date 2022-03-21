@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   gcp-gcr: circleci/gcp-gcr@0.6.1
-  gke: circleci/gcp-gke@0.2.0
+  cloudrun: circleci/gcp-cloud-run@1.0.0
 jobs:
   build:
     working_directory: ~/repo
@@ -25,7 +25,7 @@ jobs:
             echo 'export GOOGLE_CLOUD_KEYS=$(cat gcloud-service-key.json)' >> $BASH_ENV
             echo 'export IMAGE_NAME=go-service' >> $BASH_ENV && source $BASH_ENV
             echo 'export GOOGLE_PROJECT_ID=impressive-mile-343315' >> $BASH_ENV && source $BASH_ENV
-            echo 'export GOOGLE_COMPUTE_ZONE=us-central1-c' >> $BASH_ENV && source $BASH_ENV
+            echo 'export GOOGLE_COMPUTE_ZONE=us-central1' >> $BASH_ENV && source $BASH_ENV
             docker build -t gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME -t gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME:latest .
       - gcp-gcr/gcr-auth:
           gcloud-service-key: GOOGLE_CLOUD_KEYS
@@ -35,12 +35,12 @@ jobs:
           google-project-id: GOOGLE_PROJECT_ID
           registry-url: "gcr.io"
           image: $IMAGE_NAME
-      - gke/install
-      - run:
-          name: deployment
-          command:  |
-            gcloud --quiet container clusters get-credentials my-huy-k8s
-            kubectl apply -f deployment.yml
+      - cloudrun/deploy:
+          platform: "managed"
+          image: "gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME"
+          service-name: "my-circle-cloud-run"
+          region: $GOOGLE_COMPUTE_ZONE
+          unauthenticated: true
 workflows:
   build:
     jobs:
